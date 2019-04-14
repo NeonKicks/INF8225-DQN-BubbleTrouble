@@ -69,6 +69,7 @@ def draw_timer():
     rect = timer.get_rect()
     rect.bottomleft = 10, WINDOWHEIGHT - 10
     surface.blit(timer, rect)
+    del timer
 
 
 def draw_player_lives(player):

@@ -4,20 +4,22 @@ import json
 from bubbles import *
 from player import *
 
+import random
+
 
 class Game:
     def __init__(self, level=1):
         self.balls = []
         self.hexagons = []
         self.player = Player()
-        self.level = level
         self.game_over = False
         self.level_completed = False
         self.time_left = 0
         self.timers = None
         self.reward = 0
+        self.level = level
 
-    def load_level(self, level=1):
+    def load_level(self, level=1, rand=False):
         self.__init__(level)
         self.player.set_position(WINDOWWIDTH / 2)
         self.player.is_alive = True
@@ -28,11 +30,15 @@ class Game:
             self.time_left = level['time']
             for ball in level['balls']:
                 x, y = ball['x'], ball['y']
+                if rand:
+                    x, y = x + random.randint(0, 100), y + random.randint(0, 100)
                 size = ball['size']
                 speed = ball['speed']
                 self.balls.append(Ball(x, y, size, speed))
             for hexagon in level['hexagons']:
                 x, y = hexagon['x'], hexagon['y']
+                if rand:
+                    x, y = x + random.randint(0, 100), y + random.randint(0, 100)
                 size = hexagon['size']
                 speed = hexagon['speed']
                 self.hexagons.append(Hexagon(x, y, size, speed))
@@ -67,8 +73,8 @@ class Game:
             self.game_over = True
             self.reward += REWARD_DEATH
 
-    def restart(self):
-        self.load_level(self.level)
+    def restart(self, rand=False):
+        self.load_level(self.level, rand)
 
     def _split_ball(self, ball_index):
         ball = self.balls[ball_index]
@@ -107,7 +113,6 @@ class Game:
             hexagon.update()
         self.player.update()
         if not self.balls and not self.hexagons:
-            print(len(self.balls))
             self.level_completed = True
             self.reward += REWARD_WIN
 
@@ -118,6 +123,7 @@ class Game:
             timer.start()
 
     def _tick_second(self):
+        return  # Returning to avoid penalizing the AI if it is slow during processing
         self.time_left -= 1
         if self.time_left == 0:
             self._decrease_lives()

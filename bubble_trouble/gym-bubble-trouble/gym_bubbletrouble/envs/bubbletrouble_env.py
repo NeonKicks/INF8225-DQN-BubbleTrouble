@@ -1,5 +1,7 @@
 import gym
 import bt
+import random
+import time
 
 # TODO : Make is we don't need to be in this directory to import bubble_trouble
 # TODO : Add game states to game.py
@@ -8,12 +10,15 @@ LEFT = 0
 RIGHT = 1
 FIRE = 2
 
+
 class BubbleTroubleEnv(gym.Env):
     metadata = {'render.modes': ['human']}
 
-    def __init__(self):
+    def __init__(self, rand=False):
         self.action_space = gym.spaces.Discrete(3)
         self.state = None
+        self.rand = rand
+        self.seed()
 
     def step(self, action):
         """
@@ -47,7 +52,7 @@ class BubbleTroubleEnv(gym.Env):
         bt.game.update(restart=False)
         self.update()
 
-        restart = bt.game.game_over
+        restart = bt.game.game_over or bt.game.level_completed
         self.state = self.render()
 
         self.take_action(action)
@@ -56,7 +61,7 @@ class BubbleTroubleEnv(gym.Env):
         return self.state, reward, restart, {}
 
     def reset(self):
-        bt.game.restart()
+        bt.game.restart(rand=self.rand)
         self.update()
 
     @staticmethod
@@ -73,13 +78,15 @@ class BubbleTroubleEnv(gym.Env):
     def take_action(action):
         if action == LEFT:
             bt.game.player.moving_left = True
+            bt.game.reward += bt.REWARD_MOVE # Adding reward here
         elif action == RIGHT:
             bt.game.player.moving_right = True
+            bt.game.reward += bt.REWARD_MOVE
         elif action == FIRE and not bt.game.player.weapon.is_active:
             bt.game.player.shoot()
 
-    def seed(self, seed=None):
-        pass
+    def seed(self, seed=time.time()):
+        random.seed(seed)
 
     def close(self):
         bt.quit_game()
