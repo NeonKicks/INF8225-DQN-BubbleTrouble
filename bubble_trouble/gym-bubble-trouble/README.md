@@ -1,13 +1,12 @@
 # gym-bubble-trouble
-
-This is a open ai's gym adaptation of the bubble trouble game found at https://github.com/stoyaneft/bubble-trouble. It is used for RL experiments. Some modifications were made.
+This is a open ai's gym adaptation of the bubble trouble game found at https://github.com/stoyaneft/bubble-trouble. It is used for RL experiments. A lot of modifications were made.
 
 ## Setup
 1. Clone this repo.
 2. `$ cd gym-bubble-trouble`
 3. `$ pip install -e .`
 4. Move all the content of this directory on a google drive account.
-5. Start a new google collab with the `collab/bubble_trouble_dqn.ipynb'.
+5. Start a new google collab with the `collab/bubble_trouble_dqn.ipynb`.
 6. Run the notebook. 
 
 ## Repo details
