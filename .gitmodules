@@ -1,0 +1,3 @@
+[submodule "gym-bubble-trouble"]
+	path = gym-bubble-trouble
+	url = https://github.com/ferasboulala/gym-bubble-trouble.git
